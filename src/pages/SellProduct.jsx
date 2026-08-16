@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function SellProduct() {
   const [categories, setCategories] = useState([]);
@@ -36,7 +37,7 @@ function SellProduct() {
 
   // Fetch categories
   useEffect(() => {
-    fetch("http://localhost:5000/api/categories")
+    fetch(`${API_URL}/api/categories`)
       .then((response) => response.json())
       .then((data) => setCategories(data))
       .catch((error) => console.error(error));
@@ -45,16 +46,13 @@ function SellProduct() {
   // Fetch fields whenever category changes
   useEffect(() => {
     if (!selectedCategory) {
-      setFields([]);
-      setFieldValues({});
       return;
     }
 
-    fetch(`http://localhost:5000/api/categories/${selectedCategory}/fields`)
+    fetch(`${API_URL}/api/categories/${selectedCategory}/fields`)
       .then((response) => response.json())
       .then((data) => {
         setFields(data);
-        setFieldValues({});
       })
       .catch((error) => console.error(error));
   }, [selectedCategory]);
@@ -64,7 +62,7 @@ function SellProduct() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/listings", {
+      const response = await fetch(`${API_URL}/api/listings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,11 +117,15 @@ function SellProduct() {
         <div>
           <label>Category *</label>
 
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            required
-          >
+<select
+  value={selectedCategory}
+  onChange={(e) => {
+    setSelectedCategory(e.target.value);
+    setFields([]);
+    setFieldValues({});
+  }}
+  required
+>
             <option value="">Select Category</option>
 
             {categories.map((category) => (

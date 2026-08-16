@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ProductDetail() {
   const { id } = useParams();
@@ -8,7 +9,7 @@ function ProductDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/listings/${id}`)
+    fetch(`${API_URL}/api/listings/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Listing not found");

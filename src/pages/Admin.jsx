@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Admin() {
   // =============================
   // STATE
@@ -33,7 +35,7 @@ function Admin() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/categories");
+      const response = await fetch(`${API_URL}/api/categories`);
 
       const data = await response.json();
 
@@ -49,7 +51,7 @@ function Admin() {
 
   const fetchFields = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/fields");
+      const response = await fetch(`${API_URL}/api/fields`);
 
       const data = await response.json();
 
@@ -66,7 +68,7 @@ function Admin() {
   const fetchCategoryFields = async (categoryId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/categories/${categoryId}/fields`,
+        `${API_URL}/api/categories/${categoryId}/fields`,
       );
 
       const data = await response.json();
@@ -81,10 +83,26 @@ function Admin() {
   // INITIAL DATA
   // =============================
 
-  useEffect(() => {
-    fetchCategories();
-    fetchFields();
-  }, []);
+useEffect(() => {
+  const loadInitialData = async () => {
+    try {
+      const [categoriesResponse, fieldsResponse] = await Promise.all([
+        fetch(`${API_URL}/api/categories`),
+        fetch(`${API_URL}/api/fields`),
+      ]);
+
+      const categoriesData = await categoriesResponse.json();
+      const fieldsData = await fieldsResponse.json();
+
+      setCategories(categoriesData);
+      setFields(fieldsData);
+    } catch (error) {
+      console.error("Error loading initial admin data:", error);
+    }
+  };
+
+  loadInitialData();
+}, []);
 
   // =============================
   // CREATE CATEGORY
@@ -100,7 +118,7 @@ function Admin() {
     const slug = categoryName.toLowerCase().trim().replace(/\s+/g, "-");
 
     try {
-      const response = await fetch("http://localhost:5000/api/categories", {
+      const response = await fetch(`${API_URL}/api/categories`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -169,8 +187,8 @@ function Admin() {
     e.preventDefault();
 
     const url = editingField
-      ? `http://localhost:5000/api/fields/${editingField.id}`
-      : "http://localhost:5000/api/fields";
+      ? `${API_URL}/api/fields/${editingField.id}`
+      : `${API_URL}/api/fields`;
 
     const method = editingField ? "PUT" : "POST";
 
@@ -256,7 +274,7 @@ function Admin() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/fields/${fieldId}`,
+        `${API_URL}/api/fields/${fieldId}`,
         {
           method: "DELETE",
         },
@@ -313,7 +331,7 @@ function Admin() {
     try {
       for (let i = 0; i < selectedFields.length; i++) {
         const response = await fetch(
-          `http://localhost:5000/api/categories/${selectedCategory.id}/fields`,
+          `${API_URL}/api/categories/${selectedCategory.id}/fields`,
           {
             method: "POST",
             headers: {
@@ -356,7 +374,7 @@ function Admin() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/categories/${categoryId}/fields/${fieldId}`,
+        `${API_URL}/api/categories/${categoryId}/fields/${fieldId}`,
         {
           method: "DELETE",
         },
@@ -407,7 +425,7 @@ function Admin() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/categories/${editingCategory.id}`,
+        `${API_URL}/api/categories/${editingCategory.id}`,
         {
           method: "PUT",
           headers: {
@@ -450,7 +468,7 @@ function Admin() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/categories/${categoryId}`,
+        `${API_URL}/api/categories/${categoryId}`,
         {
           method: "DELETE",
         },
@@ -494,7 +512,7 @@ function Admin() {
     try {
       // Swap display orders
       await fetch(
-        `http://localhost:5000/api/categories/${selectedCategory.id}/fields/${currentField.id}/order`,
+        `${API_URL}/api/categories/${selectedCategory.id}/fields/${currentField.id}/order`,
         {
           method: "PUT",
           headers: {
@@ -507,7 +525,7 @@ function Admin() {
       );
 
       await fetch(
-        `http://localhost:5000/api/categories/${selectedCategory.id}/fields/${targetField.id}/order`,
+        `${API_URL}/api/categories/${selectedCategory.id}/fields/${targetField.id}/order`,
         {
           method: "PUT",
           headers: {
