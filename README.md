@@ -350,7 +350,7 @@ circle-marketplace/
 ### 1. Clone the repository
 
 ```bash
-git clone PASTE_YOUR_GITHUB_REPOSITORY_URL_HERE
+git clone https://github.com/jollyhub8278/circle-marketplace
 
 cd circle-marketplace
 ```
@@ -383,8 +383,6 @@ Create a `.env` file inside the `backend` folder:
 DATABASE_URL=YOUR_POSTGRESQL_CONNECTION_STRING
 PORT=5000
 ```
-
-Environment files should not be committed to Git.
 
 ### 5. Start the backend
 
@@ -570,36 +568,3 @@ Possible future improvements include:
 * Buyer-seller messaging
 * Improved form validation
 * Production monitoring and logging
-
-````
-
-### Before you commit
-
-Only change these:
-
-**1.**
-```md
-PASTE_YOUR_VERCEL_URL_HERE
-````
-
-→ your actual Vercel demo URL.
-
-**2.**
-
-```md
-PASTE_YOUR_GITHUB_REPOSITORY_URL_HERE
-```
-
-→ your actual GitHub repo URL.
-
-And in the clone command, use the same GitHub URL.
-
-Then run:
-
-```bash
-git add README.md
-git commit -m "Add project documentation"
-git push origin main
-```
-
-One thing I **wouldn't** add to the README: your Neon `DATABASE_URL`, passwords, or any actual `.env` contents. Those stay private.
